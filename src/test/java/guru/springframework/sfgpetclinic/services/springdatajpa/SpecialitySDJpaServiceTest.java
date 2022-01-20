@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
@@ -47,6 +49,15 @@ class SpecialitySDJpaServiceTest {
         when(specialtyRepository.findById(1L)).thenReturn(Optional.of(new Speciality()));
         Speciality foundSpecialty = specialtyRepository.findById(1L).orElse(null);
         assertThat(foundSpecialty).isNotNull();
-        verify(specialtyRepository).findById(1L);
+        verify(specialtyRepository).findById(anyLong());
+    }
+
+    @Test
+    void testDeleteByObject() {
+        Speciality speciality = new Speciality();
+        service.delete(speciality);
+
+        // matches with any arg object that is in type Speciality
+        verify(specialtyRepository).delete(any(Speciality.class));
     }
 }
